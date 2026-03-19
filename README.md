@@ -350,3 +350,23 @@ solutions/
   dbt/models/gold/dim_*.sql
   dbt/models/gold/fact_sales.sql
 ```
+## 🙋‍♂️ Get Involved
+
+If you encounter any issues or have questions:
+- 🐛 [Report bugs](https://github.com/markusbegerow/data-analytics-exercises/issues)
+- 💡 [Request features](https://github.com/markusbegerow/data-analytics-exercises/issues)
+- ⭐ Star the repo if you find it useful!
+
+## ☕ Support the Project
+
+If you like this project, support further development with a repost or coffee:
+
+<a href="https://www.linkedin.com/sharing/share-offsite/?url=https://github.com/MarkusBegerow/data-analytics-exercises" target="_blank"> <img src="https://img.shields.io/badge/💼-Share%20on%20LinkedIn-blue" /> </a>
+
+[![Buy Me a Coffee](https://img.shields.io/badge/☕-Buy%20me%20a%20coffee-yellow)](https://paypal.me/MarkusBegerow?country.x=DE&locale.x=de_DE)
+
+## 📬 Contact
+
+- 🧑‍💻 [Markus Begerow](https://linkedin.com/in/markusbegerow)
+- 💾 [GitHub](https://github.com/markusbegerow)
+- ✉️ [Twitter](https://x.com/markusbegerow)
