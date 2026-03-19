@@ -1,0 +1,11 @@
+client_id,client_name,client_type,region_id,email
+C001,TechCorp GmbH,Corporate,R002,contact@techcorp.de
+C002,Acme Solutions,Corporate,R001,info@acmesol.com
+C003,Maria Kowalski,Individual,R003,maria.k@email.com
+C004,Sunrise Trading,SME,R004,orders@sunrisetrading.jp
+C005,Global Retail SA,Corporate,R005,procurement@globalretail.br
+C006,DataSync Ltd,SME,R001,hello@datasync.com
+C007,EuroTech Partners,Corporate,R002,sales@eurotech.eu
+C008,Pacific Ventures,SME,R004,info@pacificventures.jp
+C009,Jan Nowak,Individual,R003,jan.nowak@email.pl
+C010,Continental Corp,Corporate,R001,procurement@continental.com

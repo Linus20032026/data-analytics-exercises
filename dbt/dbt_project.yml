@@ -1,0 +1,18 @@
+name: analytics_pipeline
+version: 1.0.0
+profile: demo_profile
+
+models:
+  analytics_pipeline:
+    staging:
+      +materialized: view
+      +schema: silver          # writes to the silver schema as views
+      +tags: ['staging']
+    silver:
+      +materialized: table
+      +schema: silver          # writes to the silver schema as tables
+      +tags: ['silver']
+    gold:
+      +materialized: table
+      +schema: gold            # writes to the gold schema as tables
+      +tags: ['gold']

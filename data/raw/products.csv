@@ -1,0 +1,11 @@
+product_id,product_name,category,subcategory,list_price
+P001,Laptop Pro 15,Electronics,Computers,1299.99
+P002,Wireless Mouse,Electronics,Peripherals,29.99
+P003,USB Hub 7-Port,Electronics,Peripherals,45.00
+P004,Office Chair Premium,Furniture,Seating,399.00
+P005,Standing Desk,Furniture,Desks,599.00
+P006,Monitor 27 inch,Electronics,Displays,349.99
+P007,Mechanical Keyboard,Electronics,Peripherals,89.99
+P008,Notebook A4 Pack,Stationery,Paper,12.50
+P009,Ballpoint Pens Box,Stationery,Writing,8.99
+P010,Desk Lamp LED,Electronics,Lighting,55.00

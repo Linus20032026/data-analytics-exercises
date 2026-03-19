@@ -1,0 +1,80 @@
+# Student analytics stack
+# Services: PostgreSQL (data warehouse), Airflow (ETL), dbt (transformations), Superset (dashboards)
+
+x-pg-env: &pg-env
+  POSTGRES_DB: analytics_demo
+  POSTGRES_USER: admin
+  POSTGRES_PASSWORD: admin
+
+services:
+
+  # ---------- DATA WAREHOUSE ----------
+  postgres:
+    image: postgres:16
+    environment: *pg-env
+    ports: ["5432:5432"]
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  # ---------- TRANSFORMATIONS ----------
+  dbt:
+    build: ./dbt
+    ports: ["8087:8087"]
+    environment:
+      DBT_HOST: postgres
+      DBT_USER: admin
+      DBT_PASSWORD: admin
+      DBT_DBNAME: analytics_demo
+    volumes:
+      - ./dbt:/dbt
+    depends_on: [ postgres ]
+
+  # ---------- ORCHESTRATION + ETL ----------
+  airflow:
+    image: apache/airflow:2.9.3
+    ports: ["8088:8080"]
+    environment:
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      AIRFLOW__WEBSERVER__RBAC: "true"
+      AIRFLOW__CORE__EXECUTOR: "SequentialExecutor"
+      # ETL connection info (used by the DAG)
+      ANALYTICS_DB_HOST: postgres
+      ANALYTICS_DB_NAME: analytics_demo
+      ANALYTICS_DB_USER: admin
+      ANALYTICS_DB_PASSWORD: admin
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./data/raw:/opt/data/raw
+      - airflowhome:/opt/airflow
+    # List form: entrypoint sees "bash", skips premature DB check
+    # Uses ; not && so "& airflow scheduler" doesn't background the whole init chain
+    command:
+      - bash
+      - -c
+      - "airflow db init ; airflow users create --username admin --password admin --firstname A --lastname D --role Admin --email admin@example.com 2>/dev/null ; airflow webserver & airflow scheduler"
+    depends_on: [ postgres, dbt ]
+
+  # ---------- DASHBOARDS ----------
+  superset:
+    build: ./superset
+    ports: ["8089:8088"]
+    environment:
+      SUPERSET_SECRET_KEY: "demo_only"
+      SUPERSET_CONFIG_PATH: "/opt/init/superset_config.py"
+      # passed through to superset_setup.py
+      ANALYTICS_DB_HOST:     postgres
+      ANALYTICS_DB_NAME:     analytics_demo
+      ANALYTICS_DB_USER:     admin
+      ANALYTICS_DB_PASSWORD: admin
+      SUPERSET_URL:          "http://localhost:8088"
+    volumes:
+      - supersethome:/app/superset_home
+      - ./init:/opt/init
+    command: ["bash", "/opt/init/superset_start.sh"]
+    depends_on: [ postgres ]
+
+volumes:
+  pgdata: {}
+  airflowhome: {}
+  supersethome: {}
