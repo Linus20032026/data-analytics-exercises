@@ -16,6 +16,10 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ./init/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d analytics_demo"]
+      interval: 5s
+      retries: 10
 
   # ---------- TRANSFORMATIONS ----------
   dbt:
@@ -38,6 +42,7 @@ services:
       AIRFLOW__CORE__LOAD_EXAMPLES: "false"
       AIRFLOW__WEBSERVER__RBAC: "true"
       AIRFLOW__CORE__EXECUTOR: "SequentialExecutor"
+      AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "false"
       # ETL connection info (used by the DAG)
       ANALYTICS_DB_HOST: postgres
       ANALYTICS_DB_NAME: analytics_demo
@@ -52,8 +57,12 @@ services:
     command:
       - bash
       - -c
-      - "airflow db init ; airflow users create --username admin --password admin --firstname A --lastname D --role Admin --email admin@example.com 2>/dev/null ; airflow webserver & airflow scheduler"
-    depends_on: [ postgres, dbt ]
+      - "airflow db init ; airflow users create --username admin --password admin --firstname A --lastname D --role Admin --email admin@example.com 2>/dev/null ; rm -f /opt/airflow/airflow-webserver.pid ; airflow webserver & sleep 20 && airflow scheduler"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      dbt:
+        condition: service_started
 
   # ---------- DASHBOARDS ----------
   superset:
